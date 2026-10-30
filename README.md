@@ -1,322 +1,235 @@
-\# Windwise — UK Wind Generation Forecast Dashboard
+<div align="center">
 
+# 🌬️ WINDWISE
 
+### UK Wind Generation Forecast Intelligence
 
-Windwise is a web dashboard for comparing forecasted and actual UK wind power generation during January 2026. It presents forecast performance through interactive visualisations and statistical error metrics.
+**Are wind generation forecasts matching reality?**
 
+An interactive analytics dashboard comparing forecasted and actual UK wind power generation throughout January 2026.
 
+<br>
 
-\## Features
+**React** · **FastAPI** · **Python** · **Docker** · **Elexon BMRS**
 
+</div>
 
+---
 
-\* Compare forecast and actual wind generation.
+## ⚡ Overview
 
-\* View forecast performance over time.
+Windwise helps explore the gap between predicted and actual wind generation. It transforms electricity-system data into an interactive dashboard, making forecast performance easier to understand through time-series visualisations and statistical metrics.
 
-\* Explore daily generation patterns.
+The project covers **January 1–31, 2026**, with **744 hourly evaluation periods**.
 
-\* Filter results by date.
+## ✨ Features
 
-\* Review forecast accuracy using MAE, RMSE, and bias.
+| Feature                  | Description                                                  |
+| ------------------------ | ------------------------------------------------------------ |
+| 📊 Generation comparison | Explore forecasted and actual wind generation over time.     |
+| 🎯 Forecast accuracy     | Evaluate performance using MAE, RMSE, and forecast bias.     |
+| 📅 Daily analysis        | Examine changes in generation patterns throughout the month. |
+| 🔎 Date filtering        | Focus on a selected period within January 2026.              |
+| ⚙️ REST API              | Retrieve analysis results through a FastAPI backend.         |
+| 🐳 Docker support        | Run the frontend and backend using Docker Compose.           |
 
-\* Access data through a Python REST API.
+## 🧰 Technology Stack
 
-\* Run the application locally or with Docker Compose.
+**Frontend**
 
+* React
+* Vite
+* Recharts
+* Lucide React
 
+**Backend**
 
-\## Technology Stack
+* Python
+* FastAPI
+* Uvicorn
 
+**Quality & Deployment**
 
+* Pytest
+* Docker
+* Docker Compose
 
-\*\*Frontend\*\*
+## 📈 Evaluation Summary
 
+The current evaluation covers all 744 hourly periods in January 2026.
 
+| Metric                         |       Result |
+| ------------------------------ | -----------: |
+| Mean Absolute Error (MAE)      |  1,886.48 MW |
+| Root Mean Squared Error (RMSE) |  2,365.68 MW |
+| Mean Forecast Bias             | +1,690.32 MW |
+| Mean Actual Generation         | 11,580.74 MW |
+| Mean Forecast Generation       | 13,271.06 MW |
+| Hours Evaluated                |          744 |
 
-\* React
+**Interpretation:** The positive bias indicates that forecasts were higher than actual generation on average under the project's forecast-minus-actual convention.
 
-\* Vite
+These metrics describe this particular dataset and evaluation method; they should not be interpreted as a general measure of forecast performance for other periods.
 
-\* Recharts
+## 🗂️ Data & Methodology
 
-\* Lucide React
+Windwise uses data from the official Elexon BMRS API.
 
+* [Actual generation — FUELHH](https://data.elexon.co.uk/bmrs/api/v1/datasets/FUELHH/stream)
+* [Historical wind generation forecasts](https://data.elexon.co.uk/bmrs/api/v1/forecast/generation/wind/history)
 
+### Processing approach
 
-\*\*Backend\*\*
+1. Load actual wind generation records for January 2026.
+2. Load historical wind forecast snapshots surrounding the evaluation period.
+3. Aggregate the two half-hourly actual measurements into an hourly value.
+4. Select a forecast snapshot published before the relevant delivery hour.
+5. Align forecast and actual values by delivery hour.
+6. Calculate forecast accuracy metrics.
 
+### Metrics explained
 
+* **MAE:** Average absolute difference between forecast and actual generation.
+* **RMSE:** Square root of the mean squared error; larger errors have greater influence.
+* **Bias:** Mean of forecast minus actual generation. Positive values indicate overforecasting.
 
-\* Python
+The results depend on the selected forecast snapshots, publication-time rules, and data availability.
 
-\* FastAPI
+## 🏗️ Architecture
 
-\* Uvicorn
-
-
-
-\*\*Testing and Deployment\*\*
-
-
-
-\* Pytest
-
-\* Docker
-
-\* Docker Compose
-
-
-
-\## Data Source
-
-
-
-Windwise uses UK electricity system data from the official Elexon BMRS API:
-
-
-
-\* Actual generation: \[Elexon BMRS API](https://data.elexon.co.uk/bmrs/api/v1/datasets/FUELHH/stream)
-
-\* Historical wind generation forecasts: \[Elexon wind forecast API](https://data.elexon.co.uk/bmrs/api/v1/forecast/generation/wind/history)
-
-
-
-The dataset covers 1–31 January 2026.
-
-
-
-\## Methodology
-
-
-
-Actual wind generation is reported at half-hourly settlement intervals. For hourly comparisons, the two half-hourly actual generation measurements within each hour are averaged.
-
-
-
-Forecasts are selected using their publication timestamps, so the comparison uses a forecast published before the relevant delivery hour. The backend then aligns the hourly forecasts with the hourly actual generation values.
-
-
-
-The dashboard calculates:
-
-
-
-\* \*\*MAE (Mean Absolute Error):\*\* Average absolute difference between forecast and actual generation.
-
-\* \*\*RMSE (Root Mean Squared Error):\*\* Error metric that gives greater weight to larger errors.
-
-\* \*\*Bias:\*\* Average signed forecast error, calculated as forecast minus actual. Positive bias indicates overforecasting.
-
-
-
-The analysis evaluates 744 hourly periods across January 2026.
-
-
-
-\## API Endpoints
-
-
-
-| Endpoint        | Description                                                  |
-
-| --------------- | ------------------------------------------------------------ |
-
-| `/`             | API status                                                   |
-
-| `/api/overview` | Summary metrics and evaluation statistics                    |
-
-| `/api/forecast` | Forecast and actual generation comparison, with date filters |
-
-| `/api/daily`    | Daily generation summaries                                   |
-
-
-
-\## Run Locally
-
-
-
-\### Requirements
-
-
-
-\* Python 3.12 or compatible version
-
-\* Node.js and npm
-
-
-
-\### 1. Start the backend
-
-
+```text
+             ┌─────────────────────────┐
+             │      React + Vite       │
+             │   Interactive Dashboard│
+             └────────────┬────────────┘
+                          │ HTTP requests
+                          ▼
+             ┌─────────────────────────┐
+             │      FastAPI Backend    │
+             │  Analysis & REST API    │
+             └────────────┬────────────┘
+                          │
+                          ▼
+             ┌─────────────────────────┐
+             │    Local JSON Data      │
+             │ Actuals + Forecasts     │
+             └─────────────────────────┘
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+* Python 3.12 or a compatible Python version
+* Node.js and npm
+* Docker Desktop, if using Docker
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/shadowMomina/windwise-energy-dashboard.git
+cd windwise-energy-dashboard
+```
+
+### 2. Start the backend
 
 From the project root:
 
-
-
 ```bash
-
 python -m pip install -r backend/requirements.txt
-
 python -m uvicorn main:app --app-dir backend --reload
-
 ```
 
+Backend: `http://127.0.0.1:8000`
 
+Interactive API documentation: `http://127.0.0.1:8000/docs`
 
-The API will be available at `http://127.0.0.1:8000`.
-
-
-
-Interactive API documentation is available at `http://127.0.0.1:8000/docs`.
-
-
-
-\### 2. Start the frontend
-
-
+### 3. Start the frontend
 
 Open a second terminal:
 
-
-
 ```bash
-
 cd frontend
-
 npm install
-
 npm run dev
-
 ```
 
+Open the local address printed by Vite.
 
+By default, the frontend uses `http://127.0.0.1:8000` for its API. Set `VITE_API_URL` when connecting it to another backend.
 
-Open the local URL printed by Vite in your terminal.
+### 🐳 Run with Docker
 
-
-
-By default, the frontend expects the API at `http://127.0.0.1:8000`. To use a different API URL, configure the `VITE\_API\_URL` environment variable.
-
-
-
-\## Run with Docker
-
-
-
-From the project root:
-
-
+From the repository root:
 
 ```bash
-
 docker compose up --build
-
 ```
 
+* Dashboard: `http://localhost:5173`
+* API: `http://localhost:8000`
+* API documentation: `http://localhost:8000/docs`
 
-
-The application services are exposed at:
-
-
-
-\* Frontend: `http://localhost:5173`
-
-\* Backend: `http://localhost:8000`
-
-\* API documentation: `http://localhost:8000/docs`
-
-
-
-Stop the containers with:
-
-
+Stop the containers:
 
 ```bash
-
 docker compose down
-
 ```
 
+## 🧪 Tests
 
-
-\## Run Tests
-
-
-
-From the project root:
-
-
+Run the test suite from the project root:
 
 ```bash
-
 python -m pip install pytest httpx
-
 python -m pytest tests -v
-
 ```
 
-
-
-\## Project Structure
-
-
+## 📁 Project Structure
 
 ```text
-
 energy-forecast-dashboard/
-
 ├── backend/
-
+│   ├── main.py
+│   ├── requirements.txt
+│   └── Dockerfile
 ├── frontend/
-
+│   ├── src/
+│   └── Dockerfile
 ├── data/
-
+│   ├── wind_actuals_jan2026.json
+│   └── wind_forecasts_jan2026.json
 ├── tests/
-
+│   └── test_api.py
+├── download_data.py
 ├── docker-compose.yml
-
 ├── .dockerignore
-
 ├── .gitignore
-
 └── README.md
-
 ```
 
+## ⚠️ Limitations
 
+* The analysis is limited to January 2026.
+* Hourly aggregation removes variation within half-hourly intervals.
+* Results depend on the forecast publication snapshots selected for comparison.
+* Forecast accuracy can vary by season and weather conditions.
+* Historical performance does not guarantee future forecast accuracy.
 
-\## Limitations
+## 🤖 AI Assistance
 
+AI tools were used to assist with development, debugging, and documentation. The implementation, data-processing decisions, and evaluation results should be reviewed and understood by the project author.
 
+## 🔗 Project Links
 
-\* Results depend on the completeness and availability of the source data.
+* **Repository:** [Windwise on GitHub](https://github.com/shadowMomina/windwise-energy-dashboard)
+* **Live Dashboard:** *Add after deployment*
+* **Demo Video:** *Add the unlisted YouTube link after recording*
 
-\* Forecast accuracy depends on the forecast publication snapshots selected for evaluation.
+---
 
-\* Hourly averaging removes some variation present in half-hourly generation.
+<div align="center">
 
-\* Results describe the selected January 2026 period and should not automatically be generalised to other months.
+**WINDWISE** · Making wind forecast performance easier to explore. 🌬️
 
-
-
-\## AI Assistance
-
-
-
-AI tools were used to assist with development, debugging, documentation, and problem-solving. The data source, processing approach, implementation, and evaluation should be reviewed and understood by the project author.
-
-
-
-\## Links
-
-
-
-\* \*\*GitHub repository:\*\* Add the repository URL after publishing.
-
-\* \*\*Live dashboard:\*\* Add the deployment URL after deployment.
-
-\* \*\*Demo video:\*\* Add the unlisted YouTube URL after recording.
-
-
-
+</div>
