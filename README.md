@@ -220,8 +220,8 @@ energy-forecast-dashboard/
 ## 🔗 Project Links
 
 * **Repository:** [Windwise on GitHub](https://github.com/shadowMomina/windwise-energy-dashboard)
-* **Live Dashboard:** (https://windwise-energy-dashboard.vercel.app/?utm_source=chatgpt.com)
-* **Demo Video:** *Add the unlisted YouTube link after recording*
+* **Live Dashboard:** (https://windwise-energy-dashboard.vercel.app/)
+* **Demo Video:** *https://www.loom.com/share/d6c69999a78e4cf6874eefff80c50090*
 
 ---
 
