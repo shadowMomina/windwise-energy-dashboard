@@ -216,14 +216,11 @@ energy-forecast-dashboard/
 * Forecast accuracy can vary by season and weather conditions.
 * Historical performance does not guarantee future forecast accuracy.
 
-## 🤖 AI Assistance
-
-AI tools were used to assist with development, debugging, and documentation. The implementation, data-processing decisions, and evaluation results should be reviewed and understood by the project author.
 
 ## 🔗 Project Links
 
 * **Repository:** [Windwise on GitHub](https://github.com/shadowMomina/windwise-energy-dashboard)
-* **Live Dashboard:** *Add after deployment*
+* **Live Dashboard:** (https://windwise-energy-dashboard.vercel.app/?utm_source=chatgpt.com)
 * **Demo Video:** *Add the unlisted YouTube link after recording*
 
 ---
