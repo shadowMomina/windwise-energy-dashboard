@@ -10,6 +10,9 @@ from fastapi.middleware.cors import CORSMiddleware
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 
+if not (DATA_DIR / "wind_actuals_jan2026.json").exists():
+    DATA_DIR = Path(__file__).resolve().parent / "data"
+
 app = FastAPI(
     title="UK Wind Forecast Analytics API",
     description="UK wind generation forecast accuracy for January 2026",
